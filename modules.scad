@@ -24,7 +24,7 @@ module chamfered_cylinder(diameter, height, chamfer) {
 // With a single child, will generate rows*cols copies of the child object
 // For multiple children, each child will be arranged in a grid with columns objects in each row
 module grid_layout(spacing, columns, rows){
-    max = $children > 1? $children - 1: rows*cols-1;
+    max = $children > 1? $children - 1: rows*columns-1;
     
     for(i=[0:1:max]){
         row = floor(i/columns);

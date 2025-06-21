@@ -105,7 +105,7 @@ module stand(){
 }
 
 
-grid_layout(base_diameter+5,3){
+grid_layout(base_diameter+5,4){
     base("1");
     base("2");
     base("3");
