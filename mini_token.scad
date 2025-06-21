@@ -1,10 +1,9 @@
+use <modules.scad>
+
 $fn=64;
 
 // Text
 text_depth = 1;
-
-// Text values - will generate a token for each value
-text_values = ["1","2","3","4","5","6"];
 
 // Token base
 base_diameter = 28; // This should match the grid size (mm) of the map you use
@@ -23,22 +22,6 @@ stand_width = base_diameter - base_chamfer;
 stand_slope = stand_side_thickness*1.5;
 text_size = base_diameter/5;
 
-
-module chamfered_cylinder(diameter, height, chamfer) {    
-    middle_height = height - chamfer*2;
-    end_diameter = diameter-chamfer;
-    
-    //top
-    translate([0,0,+middle_height/2+chamfer/2]) 
-        cylinder(h = chamfer,d1=diameter, d2=end_diameter,center=true);
-    
-    //middle
-    cylinder(h = middle_height,d=diameter,center=true);
-    
-    //bottom
-    translate([0,0,-middle_height/2-chamfer/2]) 
-        cylinder(h = chamfer,d1=end_diameter, d2=diameter,center=true);    
-}
 
 module base(text_value) {
     union(){
@@ -121,10 +104,18 @@ module stand(){
         
 }
 
-for(i=[0:1:len(text_values)-1]){
-    row = floor(i/3);
-    col = floor(i) - row*3;
-    translate([(base_diameter+5)*col,-(base_diameter+5)*row,0]) 
-    base(text_values[i]);
-}
 
+grid_layout(base_diameter+5,3){
+    base("1");
+    base("2");
+    base("3");
+    base("4");
+    base("5");
+    base("6");
+    base("7");
+    base("8");
+    base("9");
+    base("10");
+    base("11");
+    base("12");
+}
