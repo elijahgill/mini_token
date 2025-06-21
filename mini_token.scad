@@ -1,8 +1,10 @@
 $fn=64;
 
-//TODO
-// - decal / number for token
-// - clean up module parameters for consistency
+// Text
+text_depth = 1;
+
+// Text values - will generate a token for each value
+text_values = ["1","2","3","4","5","6"];
 
 // Token base
 base_diameter = 28; // This should match the grid size (mm) of the map you use
@@ -19,6 +21,7 @@ slot_space = 0.4; // This should match the thickness of the material you plan on
 // calculated values
 stand_width = base_diameter - base_chamfer;
 stand_slope = stand_side_thickness*1.5;
+text_size = base_diameter/5;
 
 
 module chamfered_cylinder(diameter, height, chamfer) {    
@@ -35,6 +38,27 @@ module chamfered_cylinder(diameter, height, chamfer) {
     //bottom
     translate([0,0,-middle_height/2-chamfer/2]) 
         cylinder(h = chamfer,d1=end_diameter, d2=diameter,center=true);    
+}
+
+module base(text_value) {
+    union(){
+        difference(){
+            chamfered_cylinder(base_diameter, base_height, base_chamfer);
+            
+            // Text bottom
+            translate([0,base_diameter/2-text_size,base_height/2-text_depth])
+            linear_extrude(text_depth)
+            text(text_value,text_size,"Free Mono",halign="center",valign="center");
+
+            // Text top
+            translate([0,-base_diameter/2+text_size,base_height/2-text_depth])
+            linear_extrude(text_depth)
+            rotate(180)
+            text(text_value,text_size,"Free Mono",halign="center",valign="center");
+        }
+        translate([0,0,base_height/2]) 
+        stand();        
+    }
 }
 
 
@@ -97,6 +121,10 @@ module stand(){
         
 }
 
-chamfered_cylinder(base_diameter, base_height, base_chamfer);
-translate([0,0,base_height/2]) 
-stand();
+for(i=[0:1:len(text_values)-1]){
+    row = floor(i/3);
+    col = floor(i) - floor(row*3);
+    translate([(base_diameter+5)*col,-(base_diameter+5)*row,0]) 
+    base(text_values[i]);
+}
+
