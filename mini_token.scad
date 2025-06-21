@@ -123,7 +123,7 @@ module stand(){
 
 for(i=[0:1:len(text_values)-1]){
     row = floor(i/3);
-    col = floor(i) - floor(row*3);
+    col = floor(i) - row*3;
     translate([(base_diameter+5)*col,-(base_diameter+5)*row,0]) 
     base(text_values[i]);
 }
