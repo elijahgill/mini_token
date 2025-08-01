@@ -21,27 +21,43 @@ slot_space = 0.4; // This should match the thickness of the material you plan on
 stand_width = base_diameter - base_chamfer;
 stand_slope = stand_side_thickness*1.5;
 text_size = base_diameter/5;
+text_spacing = .5;
+text_font = "Free Mono:style=Bold";
 
 
-module base(text_value) {
+module base_stand(text_value) {
     union(){
         difference(){
             chamfered_cylinder(base_diameter, base_height, base_chamfer);
             
             // Text bottom
-            translate([0,base_diameter/2-text_size,base_height/2-text_depth])
+            translate([-text_spacing*text_size/2,base_diameter/2-text_size,base_height/2-text_depth])
             linear_extrude(text_depth)
-            text(text_value,text_size,"Free Mono",halign="center",valign="center");
+            text(text_value,text_size,text_font,halign="center",valign="center",spacing=text_spacing);
 
             // Text top
-            translate([0,-base_diameter/2+text_size,base_height/2-text_depth])
+            translate([+text_spacing*text_size/2,-base_diameter/2+text_size,base_height/2-text_depth])
             linear_extrude(text_depth)
             rotate(180)
-            text(text_value,text_size,"Free Mono",halign="center",valign="center");
+            text(text_value,text_size,text_font,halign="center",valign="center",spacing=text_spacing);
         }
         translate([0,0,base_height/2]) 
         stand();        
     }
+}
+
+module base_text(text_value) {
+    difference(){
+        chamfered_cylinder(base_diameter, base_height, base_chamfer);
+        
+        // Text center
+        translate([-text_spacing*text_size,base_diameter/4-text_size,base_height/2-text_depth])
+        linear_extrude(text_depth)
+        text(text_value,text_size*2,text_font,halign="center",valign="center",spacing=text_spacing);
+
+        
+    }       
+    
 }
 
 
@@ -105,17 +121,11 @@ module stand(){
 }
 
 
-grid_layout(base_diameter+5,4){
-    base("1");
-    base("2");
-    base("3");
-    base("4");
-    base("5");
-    base("6");
-    base("7");
-    base("8");
-    base("9");
-    base("10");
-    base("11");
-    base("12");
+grid_layout(base_diameter+5,3){
+    base_stand("A");
+    base_stand("B");
+    base_stand("C");
+    base_text("1");    
+    base_text("2");    
+    base_text("3");
 }
